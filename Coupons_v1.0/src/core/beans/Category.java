@@ -1,9 +1,11 @@
 package core.beans;
 
 /**
+ * Enumerated list of available coupon categories
+ * 
  * @autor Daniel Sorkin
  * 
- *        last update 2021-1-11
+ *        last update 2021-1-12
  */
 public enum Category {
 
