@@ -6,11 +6,11 @@ package util.sql;
 public class DB_Config {
 
 	// driver and connection
-	private final static String DRIVER = "com.mysql.cj.jdbc.Driver.class";
+	private final static String DRIVER = "com.mysql.cj.jdbc.Driver";
 	private final static String PROTOCOL = "jdbc:mysql://";
 	private final static String HOST = "127.0.0.1";
-	private final static String PORT = ":3306";
-	private final static String DB = "/Coupons_v1";
+	private final static String PORT = ":3306/";
+	private final static String DB = "Coupons_v1";
 	private final static String PARAMS = "?createDatabaseIfNotExist=true&serverTimezone=UTC";
 	private final static String URL = PROTOCOL + HOST + PORT + DB + PARAMS;
 
