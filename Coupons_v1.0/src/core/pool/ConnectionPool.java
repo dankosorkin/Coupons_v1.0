@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import core.exceptions.ConnectionPoolException;
-import util.sql.DB_Config;
+import util.db.DB_Config;
 
 /**
  * Singleton class with lazy initialization. ConnectionPool instance manages

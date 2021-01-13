@@ -1,4 +1,4 @@
-package util.sql;
+package util.db;
 
 /**
  * Database configuration file. Default connection to MySQL server.
