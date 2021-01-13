@@ -1,16 +1,16 @@
 package util.sql;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import core.beans.Category;
+import core.pool.ConnectionPool;
 
 public class DB_Builder {
 
-	private static Connection conn;
+	private static Connection connection;
 
 	// create table queries
 	private static final String COMPANIES = "CREATE TABLE IF NOT EXISTS Coupons_v1.Companies("
@@ -62,18 +62,18 @@ public class DB_Builder {
 	 */
 	public static void executeSqlQuery(String sql) throws SQLException {
 		try {
-			if (conn == null)
-				conn = DriverManager.getConnection(DB_Config.getUrl(), DB_Config.getUser(), DB_Config.getPassword());
+			if (connection == null)
+				connection = ConnectionPool.getInstance().getConnection();
 
-			Statement stmt = conn.createStatement();
+			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (conn != null)
-				conn.close();
-			conn = null;
+			if (connection != null)
+				ConnectionPool.getInstance().restoreConnection(connection);
+			connection = null;
 		}
 	}
 
@@ -89,20 +89,19 @@ public class DB_Builder {
 
 		for (Category category : Category.values()) {
 			try {
-				if (conn == null)
-					conn = DriverManager.getConnection(DB_Config.getUrl(), DB_Config.getUser(),
-							DB_Config.getPassword());
+				if (connection == null)
+					connection = ConnectionPool.getInstance().getConnection();
 
-				PreparedStatement pstmt = conn.prepareStatement(sql);
+				PreparedStatement pstmt = connection.prepareStatement(sql);
 				pstmt.setInt(1, category.ordinal() + 1);
 				pstmt.executeUpdate();
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				if (conn != null)
-					conn.close();
-				conn = null;
+				if (connection != null)
+					ConnectionPool.getInstance().restoreConnection(connection);
+				connection = null;
 			}
 		}
 
