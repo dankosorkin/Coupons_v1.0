@@ -2,10 +2,10 @@ package util.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import core.beans.Category;
+import core.exceptions.ConnectionPoolException;
 import core.pool.ConnectionPool;
 
 public class DB_Builder {
@@ -50,7 +50,7 @@ public class DB_Builder {
 			populateCategories();
 			System.out.println("[v] -> CATEGORIES table populated");
 
-		} catch (SQLException e) {
+		} catch (ConnectionPoolException e) {
 			e.printStackTrace();
 		}
 	}
@@ -58,9 +58,9 @@ public class DB_Builder {
 	/**
 	 * Static method executes single SQL statement
 	 * 
-	 * @throws SQLException
+	 * @throws ConnectionPoolException
 	 */
-	public static void executeSqlQuery(String sql) throws SQLException {
+	public static void executeSqlQuery(String sql) throws ConnectionPoolException {
 		try {
 			if (connection == null)
 				connection = ConnectionPool.getInstance().getConnection();
@@ -81,9 +81,9 @@ public class DB_Builder {
 	 * Static method iterates through Category enumeration and populate values to
 	 * CATEGORIES table in a database. Values saved as ordinal.
 	 * 
-	 * @throws SQLException
+	 * @throws ConnectionPoolException
 	 */
-	private static void populateCategories() throws SQLException {
+	private static void populateCategories() throws ConnectionPoolException {
 
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Categories VALUES(0,?)";
 
