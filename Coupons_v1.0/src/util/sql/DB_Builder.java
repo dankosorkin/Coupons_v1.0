@@ -13,21 +13,22 @@ public class DB_Builder {
 	private static Connection connection;
 
 	// create table queries
-	private static final String COMPANIES = "CREATE TABLE IF NOT EXISTS Coupons_v1.Companies("
+	private static final String COMPANIES = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name() + ".Companies("
 			+ "id INT primary key auto_increment,name VARCHAR(30),email VARCHAR(30),password VARCHAR(30));";
-	private static final String CUSTOMERS = "CREATE TABLE IF NOT EXISTS Coupons_v1.Customers("
+	private static final String CUSTOMERS = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name() + ".Customers("
 			+ "id INT primary key auto_increment,first_name VARCHAR(30),last_name VARCHAR(30),"
 			+ "email VARCHAR(30),password VARCHAR(30));";
-	private static final String CATEGORIES = "CREATE TABLE IF NOT EXISTS Coupons_v1.Categories("
+	private static final String CATEGORIES = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name() + ".Categories("
 			+ "id INT primary key auto_increment,category_id int);";
-	private static final String COUPONS = "CREATE TABLE IF NOT EXISTS Coupons_v1.Coupons("
+	private static final String COUPONS = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name() + ".Coupons("
 			+ "id INT primary key auto_increment,company_id int,category_id int,title VARCHAR(30),"
 			+ "description VARCHAR(50),start_date date,end_date date,amount int,price double,"
-			+ "image VARCHAR(50),foreign key (company_id) references Coupons_v1.Companies(id),"
-			+ "foreign key (category_id) references Coupons_v1.Categories(id));";
-	private static final String CUSTOMERS_VS_COUPONS = "CREATE TABLE IF NOT EXISTS Coupons_v1.Customers_VS_Coupons("
-			+ "customer_id int primary key,coupon_id int,foreign key(customer_id) references Coupons_V1.Customers(id),"
-			+ "foreign key(coupon_id) references Coupons_V1.Coupons(id));";
+			+ "image VARCHAR(50),foreign key (company_id) references " + DB_Config.getDb_name() + ".Companies(id),"
+			+ "foreign key (category_id) references " + DB_Config.getDb_name() + ".Categories(id));";
+	private static final String CUSTOMERS_VS_COUPONS = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name()
+			+ ".Customers_VS_Coupons(customer_id int primary key,coupon_id int,foreign key(customer_id) references "
+			+ DB_Config.getDb_name() + ".Customers(id),foreign key(coupon_id) references " + DB_Config.getDb_name()
+			+ ".Coupons(id));";
 
 	// drop database
 	private static final String DROP_DB = "DROP DATABASE " + DB_Config.getDb_name();
@@ -35,8 +36,8 @@ public class DB_Builder {
 	public static void main(String[] args) {
 
 		try {
-			executeSqlQuery(DROP_DB);
-			System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped");
+//			executeSqlQuery(DROP_DB);
+//			System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped");
 			executeSqlQuery(COMPANIES);
 			System.out.println("[v] -> COMPANIES table created");
 			executeSqlQuery(CUSTOMERS);

@@ -10,19 +10,28 @@ import java.util.Set;
 import core.exceptions.ConnectionPoolException;
 import util.sql.DB_Config;
 
+/**
+ * Singleton class with lazy initialization. ConnectionPool instance manages
+ * pool of connections via syncrhonzed methods getConnection() and
+ * restoreConnection().
+ */
 public class ConnectionPool {
 
+	// attributes
 	private static ConnectionPool instance;
 	private static Set<Connection> pool = new HashSet<Connection>();
 	private static final int POOL_SIZE = 10;
 
+	// private constructor loads driver and populates pool with connections
 	private ConnectionPool() throws ConnectionPoolException {
 		try {
-			for (int i = 0; i < POOL_SIZE; i++) {
+			Class.forName(DB_Config.getDriver());
+			for (int i = 0; i < POOL_SIZE; i++)
 				pool.add(DriverManager.getConnection(DB_Config.getUrl(), DB_Config.getUser(), DB_Config.getPassword()));
-			}
 		} catch (SQLException e) {
 			throw new ConnectionPoolException("", e);
+		} catch (ClassNotFoundException e) {
+			throw new ConnectionPoolException("There is a problem to load database driver", e);
 		}
 
 	}
