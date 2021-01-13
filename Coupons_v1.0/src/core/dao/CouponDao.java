@@ -5,7 +5,7 @@ import java.util.List;
 import core.beans.Coupon;
 import core.exceptions.CouponsException;
 
-public interface CouponsDao {
+public interface CouponDao {
 
 	int addCoupon(Coupon coupon) throws CouponsException;
 

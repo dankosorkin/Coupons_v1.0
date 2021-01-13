@@ -5,7 +5,7 @@ import java.util.List;
 import core.beans.Company;
 import core.exceptions.CouponsException;
 
-public interface CompaniesDao {
+public interface CompanyDao {
 
 	boolean isCompanyExists(String name, String password) throws CouponsException;
 
