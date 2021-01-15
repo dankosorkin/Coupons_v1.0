@@ -1,5 +1,6 @@
 package core.beans;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -9,7 +10,9 @@ import java.time.LocalDate;
  * 
  *        last update 2021-1-12
  */
-public class Coupon {
+public class Coupon implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	// attributes
 	private int id;

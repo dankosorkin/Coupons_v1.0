@@ -1,5 +1,6 @@
 package core.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,9 @@ import java.util.List;
  * 
  *        last update 2021-1-11
  */
-public class Customer {
+public class Customer implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	// attributes
 	private int id;

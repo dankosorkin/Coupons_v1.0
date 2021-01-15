@@ -13,7 +13,7 @@ public interface CompanyDao {
 
 	void updateCompany(Company company) throws CouponsException;
 
-	void deleteCompany() throws CouponsException;
+	void deleteCompany(int companyId) throws CouponsException;
 
 	Company getOneCompany(int companyId) throws CouponsException;
 

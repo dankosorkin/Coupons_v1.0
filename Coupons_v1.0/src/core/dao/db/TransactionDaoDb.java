@@ -7,6 +7,7 @@ import core.exceptions.ConnectionPoolException;
 import core.exceptions.CouponsException;
 import core.pool.ConnectionPool;
 
+// TODO
 public class TransactionDaoDb implements TransactionDao {
 
 	private ConnectionPool pool;
@@ -14,7 +15,6 @@ public class TransactionDaoDb implements TransactionDao {
 	private CompanyDaoDb companyDao = new CompanyDaoDb();
 
 	public TransactionDaoDb() throws ConnectionPoolException {
-		pool = ConnectionPool.getInstance();
 	}
 
 	@Override

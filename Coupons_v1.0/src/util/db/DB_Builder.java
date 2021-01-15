@@ -10,6 +10,7 @@ import core.pool.ConnectionPool;
 
 public class DB_Builder {
 
+	private static ConnectionPool pool;
 	private static Connection connection;
 
 	// create table queries
@@ -64,7 +65,7 @@ public class DB_Builder {
 	public static void executeSqlQuery(String sql) throws ConnectionPoolException {
 		try {
 			if (connection == null)
-				connection = ConnectionPool.getInstance().getConnection();
+				connection = pool.getInstance().getConnection();
 
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
@@ -73,7 +74,7 @@ public class DB_Builder {
 			e.printStackTrace();
 		} finally {
 			if (connection != null)
-				ConnectionPool.getInstance().restoreConnection(connection);
+				pool.getInstance().restoreConnection(connection);
 			connection = null;
 		}
 	}
@@ -91,7 +92,7 @@ public class DB_Builder {
 		for (Category category : Category.values()) {
 			try {
 				if (connection == null)
-					connection = ConnectionPool.getInstance().getConnection();
+					connection = pool.getInstance().getConnection();
 
 				PreparedStatement pstmt = connection.prepareStatement(sql);
 				pstmt.setInt(1, category.ordinal() + 1);
@@ -101,7 +102,7 @@ public class DB_Builder {
 				e.printStackTrace();
 			} finally {
 				if (connection != null)
-					ConnectionPool.getInstance().restoreConnection(connection);
+					pool.getInstance().restoreConnection(connection);
 				connection = null;
 			}
 		}
