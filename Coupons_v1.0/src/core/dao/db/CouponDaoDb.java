@@ -23,7 +23,7 @@ public class CouponDaoDb implements CouponDao {
 	private ResultSet rs;
 
 	@Override
-	public int addCoupon(Coupon coupon) throws CouponsException {
+	public int add(Coupon coupon) throws CouponsException {
 
 		int id = 0;
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Coupons VALUES(?,?,?,?,?,?,?,?,?)";
@@ -57,7 +57,7 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public void updateCoupon(Coupon coupon) throws CouponsException {
+	public void update(Coupon coupon) throws CouponsException {
 
 		String sql = "UPDATE " + DB_Config.getDb_name()
 				+ " SET category_id=?, title=?, description=?, start_date=? end_date? amount=?, price=? image=? WHERE id=?";
@@ -88,9 +88,11 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public void deleteCoupon(int couponId) throws CouponsException {
+	public Coupon delete(int couponId) throws CouponsException {
 
 		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Coupons WHERE id=?";
+
+		Coupon coupon = null;
 
 		try {
 			conn = pool.getConnection();
@@ -107,10 +109,12 @@ public class CouponDaoDb implements CouponDao {
 			conn = null;
 		}
 
+		return coupon;
+
 	}
 
 	@Override
-	public Coupon getOneCoupon(int couponId) throws CouponsException {
+	public Coupon findById(int id) throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE id=?";
 
@@ -119,7 +123,7 @@ public class CouponDaoDb implements CouponDao {
 		try {
 			conn = pool.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, couponId);
+			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -151,7 +155,7 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public List<Coupon> getAllCoupons() throws CouponsException {
+	public List<Coupon> findAll() throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons";
 
@@ -191,7 +195,47 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public void addCouponPurchaase(int customerId, int couponId) throws CouponsException {
+	public List<Coupon> findAllByCompanyId(int id) throws CouponsException {
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE company_id=?";
+
+		List<Coupon> coupons = null;
+
+		try {
+			conn = pool.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt("id"));
+				coupon.setCompanyId(rs.getInt("company_id"));
+				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
+				coupon.setTitle(rs.getString("title"));
+				coupon.setDescription(rs.getString("description"));
+				coupon.setStartDate((rs.getDate("start_date")).toLocalDate());
+				coupon.setEndDate((rs.getDate("end_date")).toLocalDate());
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+				coupons.add(coupon);
+			}
+
+		} catch (SQLException e) {
+			throw new CouponsException("[x] -> CouponsDAO: failed to get all coupons belonging to a company", e);
+		} finally {
+			rs = null;
+
+			if (conn != null)
+				pool.restoreConnection(conn);
+			conn = null;
+		}
+
+		return coupons;
+	}
+
+	@Override
+	public void addPurchase(int customerId, int couponId) throws CouponsException {
 
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers_VS_Coupons VALUES(?,?)";
 
@@ -214,7 +258,7 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public void deleteCouponPurchaase(int customerId, int couponId) throws CouponsException {
+	public void deletePurchase(int customerId, int couponId) throws CouponsException {
 
 		String sql = "DELETE FROM" + DB_Config.getDb_name()
 				+ ".Customers_VS_Coupons WHERE customer_id=? AND coupon_id=?";

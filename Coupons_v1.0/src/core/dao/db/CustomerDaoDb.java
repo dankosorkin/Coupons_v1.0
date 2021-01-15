@@ -21,7 +21,7 @@ public class CustomerDaoDb implements CustomerDao {
 	private ResultSet rs;
 
 	@Override
-	public boolean isCustomerExists(String email, String password) throws CouponsException {
+	public boolean isExists(String email, String password) throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customers WHERE email=? AND password=?";
 
@@ -52,7 +52,7 @@ public class CustomerDaoDb implements CustomerDao {
 	}
 
 	@Override
-	public int addCustomer(Customer customer) throws CouponsException {
+	public int add(Customer customer) throws CouponsException {
 
 		int id = 0;
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers VALUES(?,?,?,?)";
@@ -81,7 +81,7 @@ public class CustomerDaoDb implements CustomerDao {
 	}
 
 	@Override
-	public void updateCustomer(Customer customer) throws CouponsException {
+	public void update(Customer customer) throws CouponsException {
 
 		String sql = "UPDATE " + DB_Config.getDb_name()
 				+ ".Customers SET first_name=? last_name=?, email=?, password=? WHERE id=?";
@@ -109,9 +109,11 @@ public class CustomerDaoDb implements CustomerDao {
 	}
 
 	@Override
-	public void deleteCustomer(int customerId) throws CouponsException {
+	public Customer delete(int customerId) throws CouponsException {
 
 		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Customers WHERE id=?";
+
+		Customer customer = null;
 
 		try {
 			conn = pool.getConnection();
@@ -129,10 +131,12 @@ public class CustomerDaoDb implements CustomerDao {
 				pool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
+
+		return customer;
 	}
 
 	@Override
-	public Customer getOneCustomer(int customerId) throws CouponsException {
+	public Customer findById(int customerId) throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customers WHERE id=?";
 
@@ -169,7 +173,7 @@ public class CustomerDaoDb implements CustomerDao {
 	}
 
 	@Override
-	public List<Customer> getAllCustomers() throws CouponsException {
+	public List<Customer> findAll() throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customers";
 

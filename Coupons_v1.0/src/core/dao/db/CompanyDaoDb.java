@@ -21,7 +21,7 @@ public class CompanyDaoDb implements CompanyDao {
 	private ResultSet rs;
 
 	@Override
-	public boolean isCompanyExists(String email, String password) throws CouponsException {
+	public boolean isExists(String email, String password) throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE email=? AND password=?";
 
@@ -53,7 +53,7 @@ public class CompanyDaoDb implements CompanyDao {
 	}
 
 	@Override
-	public int addCompany(Company company) throws CouponsException {
+	public int add(Company company) throws CouponsException {
 
 		int id = 0;
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Companies VALUES(?,?,?)";
@@ -66,7 +66,6 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt.setString(3, company.getPassword());
 
 			id = pstmt.executeUpdate();
-
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CompaniyDAO: failed to add company", e);
 		} finally {
@@ -81,16 +80,16 @@ public class CompanyDaoDb implements CompanyDao {
 	}
 
 	@Override
-	public void updateCompany(Company company) throws CouponsException {
+	public void update(Company company) throws CouponsException {
 
 		String sql = "UPDATE " + DB_Config.getDb_name() + ".Companies SET email=?, password=? WHERE id=?";
 
 		try {
 			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, company.getEmail());
-			pstmt.setString(2, company.getPassword());
-			pstmt.setInt(3, company.getId());
+			pstmt.setString(1, ((Company) company).getEmail());
+			pstmt.setString(2, ((Company) company).getPassword());
+			pstmt.setInt(3, ((Company) company).getId());
 
 			pstmt.executeUpdate();
 
@@ -106,16 +105,26 @@ public class CompanyDaoDb implements CompanyDao {
 	}
 
 	@Override
-	public void deleteCompany(int companyId) throws CouponsException {
+	public Company delete(int id) throws CouponsException {
 
 		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Companies WHERE id=?";
+
+		Company company = null;
 
 		try {
 			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, companyId);
+			pstmt.setInt(1, id);
 
-			pstmt.executeUpdate();
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				company = new Company();
+				company.setId(rs.getInt("id"));
+				company.setName(rs.getString("name"));
+				company.setEmail(rs.getString("email"));
+				company.setPassword(rs.getString("password"));
+			}
 
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CompaniyDAO: failed to remove company", e);
@@ -127,10 +136,12 @@ public class CompanyDaoDb implements CompanyDao {
 			conn = null;
 		}
 
+		return company;
+
 	}
 
 	@Override
-	public Company getOneCompany(int companyId) throws CouponsException {
+	public Company findById(int companyId) throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE id=?";
 
@@ -166,8 +177,79 @@ public class CompanyDaoDb implements CompanyDao {
 	}
 
 	@Override
-	public List<Company> getAllCompanies() throws CouponsException {
+	public Company findByName(String name) throws CouponsException {
 
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE name=?";
+
+		Company company = null;
+
+		try {
+			conn = pool.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				company = new Company();
+				company.setId(rs.getInt("id"));
+				company.setName(rs.getString("name"));
+				company.setEmail(rs.getString("email"));
+				company.setPassword(rs.getString("password"));
+			}
+
+		} catch (SQLException e) {
+			throw new CouponsException("[x] -> CompaniyDAO: failed to get company from database", e);
+		} finally {
+			rs = null;
+			pstmt = null;
+
+			if (conn != null)
+				pool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+
+		return company;
+	}
+
+	@Override
+	public Company findByEmail(String email) throws CouponsException {
+
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE email=?";
+
+		Company company = null;
+
+		try {
+			conn = pool.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				company = new Company();
+				company.setId(rs.getInt("id"));
+				company.setName(rs.getString("name"));
+				company.setEmail(rs.getString("email"));
+				company.setPassword(rs.getString("password"));
+			}
+
+		} catch (SQLException e) {
+			throw new CouponsException("[x] -> CompaniyDAO: failed to get company from database", e);
+		} finally {
+			rs = null;
+			pstmt = null;
+
+			if (conn != null)
+				pool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+
+		return company;
+	}
+
+	@Override
+	public List<Company> findAll() throws CouponsException {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies";
 
 		List<Company> companies = null;

@@ -7,18 +7,20 @@ import core.exceptions.CouponsException;
 
 public interface CouponDao {
 
-	int addCoupon(Coupon coupon) throws CouponsException;
+	int add(Coupon coupon) throws CouponsException;
 
-	void updateCoupon(Coupon coupon) throws CouponsException;
+	void update(Coupon coupon) throws CouponsException;
 
-	void deleteCoupon(int couponId) throws CouponsException;
+	Coupon delete(int id) throws CouponsException;
 
-	Coupon getOneCoupon(int couponId) throws CouponsException;
+	Coupon findById(int id) throws CouponsException;
 
-	List<Coupon> getAllCoupons() throws CouponsException;
+	List<Coupon> findAll() throws CouponsException;
 
-	void addCouponPurchaase(int customerId, int couponId) throws CouponsException;
+	List<Coupon> findAllByCompanyId(int id) throws CouponsException;
 
-	void deleteCouponPurchaase(int customerId, int couponId) throws CouponsException;
+	void addPurchase(int customerId, int couponId) throws CouponsException;
+
+	void deletePurchase(int customerId, int couponId) throws CouponsException;
 
 }
