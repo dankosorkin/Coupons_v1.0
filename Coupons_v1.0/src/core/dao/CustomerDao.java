@@ -7,13 +7,13 @@ import core.exceptions.CouponsException;
 
 public interface CustomerDao {
 
-	boolean isCustomerExists(String name, String password) throws CouponsException;
+	boolean isCustomerExists(String email, String password) throws CouponsException;
 
 	int addCustomer(Customer customer) throws CouponsException;
 
 	void updateCustomer(Customer customer) throws CouponsException;
 
-	void deleteCustomer() throws CouponsException;
+	void deleteCustomer(int customerId) throws CouponsException;
 
 	Customer getOneCustomer(int customerId) throws CouponsException;
 

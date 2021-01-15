@@ -7,7 +7,7 @@ import core.exceptions.CouponsException;
 
 public interface CompanyDao {
 
-	boolean isCompanyExists(String name, String password) throws CouponsException;
+	boolean isCompanyExists(String email, String password) throws CouponsException;
 
 	int addCompany(Company company) throws CouponsException;
 

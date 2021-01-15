@@ -21,14 +21,14 @@ public class CompanyDaoDb implements CompanyDao {
 	private ResultSet rs;
 
 	@Override
-	public boolean isCompanyExists(String name, String password) throws CouponsException {
+	public boolean isCompanyExists(String email, String password) throws CouponsException {
 
-		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE name=? AND password=?";
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE email=? AND password=?";
 
 		try {
 			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, name);
+			pstmt.setString(1, email);
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 
