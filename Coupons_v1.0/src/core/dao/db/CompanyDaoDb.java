@@ -63,8 +63,12 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt.setString(1, company.getName());
 			pstmt.setString(2, company.getEmail());
 			pstmt.setString(3, company.getPassword());
+			pstmt.executeUpdate();
 
-			id = pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			if (rs.next())
+				id = rs.getInt(1);
+
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CompaniyDAO: failed to add company", e);
 		} finally {

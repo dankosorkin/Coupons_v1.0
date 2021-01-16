@@ -48,7 +48,7 @@ public class DB_Builder {
 	public static void build() throws ConnectionPoolException {
 
 		executeSqlQuery(DROP_DB);
-		System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped");
+		System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped & recreated");
 		executeSqlQuery(COMPANIES);
 		System.out.println("[v] -> COMPANIES table created");
 		executeSqlQuery(CUSTOMERS);
@@ -61,7 +61,7 @@ public class DB_Builder {
 		System.out.println("[v] -> CUSTOMERS_VS_COUPONS table created");
 		populateCategories();
 		System.out.println("[v] -> CATEGORIES table populated");
-
+		System.out.println("=========== START TEST ============");
 	}
 
 	/**
