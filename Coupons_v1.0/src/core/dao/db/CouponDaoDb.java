@@ -17,7 +17,6 @@ import util.db.DB_Config;
 
 public class CouponDaoDb implements CouponDao {
 
-	private ConnectionPool pool;
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
@@ -29,7 +28,7 @@ public class CouponDaoDb implements CouponDao {
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Coupons VALUES(?,?,?,?,?,?,?,?,?)";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, coupon.getCompanyId());
 			pstmt.setInt(2, coupon.getCategory().ordinal() + 1);
@@ -49,7 +48,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -63,7 +62,7 @@ public class CouponDaoDb implements CouponDao {
 				+ " SET category_id=?, title=?, description=?, start_date=? end_date? amount=?, price=? image=? WHERE id=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, coupon.getCategory().ordinal() + 1);
 			pstmt.setString(2, coupon.getTitle());
@@ -82,7 +81,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 	}
@@ -95,7 +94,7 @@ public class CouponDaoDb implements CouponDao {
 		Coupon coupon = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, couponId);
 			pstmt.executeUpdate();
@@ -105,7 +104,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -121,7 +120,7 @@ public class CouponDaoDb implements CouponDao {
 		Coupon coupon = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
@@ -147,7 +146,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -162,7 +161,7 @@ public class CouponDaoDb implements CouponDao {
 		List<Coupon> coupons = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			Statement stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 
@@ -187,7 +186,7 @@ public class CouponDaoDb implements CouponDao {
 			rs = null;
 
 			if (conn != null)
-				pool.restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -201,7 +200,7 @@ public class CouponDaoDb implements CouponDao {
 		List<Coupon> coupons = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
@@ -222,12 +221,11 @@ public class CouponDaoDb implements CouponDao {
 			}
 
 		} catch (SQLException e) {
-			throw new CouponsException("[x] -> CouponsDAO: failed to get all coupons belonging to a company", e);
 		} finally {
 			rs = null;
 
 			if (conn != null)
-				pool.restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -240,7 +238,7 @@ public class CouponDaoDb implements CouponDao {
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers_VS_Coupons VALUES(?,?)";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, customerId);
 			pstmt.setInt(2, couponId);
@@ -252,7 +250,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 	}
@@ -264,7 +262,7 @@ public class CouponDaoDb implements CouponDao {
 				+ ".Customers_VS_Coupons WHERE customer_id=? AND coupon_id=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, customerId);
 			pstmt.setInt(2, couponId);
@@ -276,7 +274,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 	}

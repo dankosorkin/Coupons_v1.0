@@ -45,7 +45,7 @@ public class ConnectionPool {
 	 * 
 	 * @throws ConnectionPoolException
 	 */
-	public ConnectionPool getInstance() throws ConnectionPoolException {
+	public static ConnectionPool getInstance() throws ConnectionPoolException {
 		if (instance == null)
 			instance = new ConnectionPool();
 

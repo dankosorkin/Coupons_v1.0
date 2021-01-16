@@ -15,7 +15,6 @@ import util.db.DB_Config;
 
 public class CustomerDaoDb implements CustomerDao {
 
-	private ConnectionPool pool;
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
@@ -26,7 +25,7 @@ public class CustomerDaoDb implements CustomerDao {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customers WHERE email=? AND password=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
@@ -43,7 +42,7 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 
 		}
@@ -58,7 +57,7 @@ public class CustomerDaoDb implements CustomerDao {
 		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers VALUES(?,?,?,?)";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
@@ -73,7 +72,7 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -87,7 +86,7 @@ public class CustomerDaoDb implements CustomerDao {
 				+ ".Customers SET first_name=? last_name=?, email=?, password=? WHERE id=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
@@ -103,7 +102,7 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 	}
@@ -116,7 +115,7 @@ public class CustomerDaoDb implements CustomerDao {
 		Customer customer = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, customerId);
 
@@ -128,7 +127,7 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -143,7 +142,7 @@ public class CustomerDaoDb implements CustomerDao {
 		Customer customer = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, customerId);
 
@@ -165,7 +164,7 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -180,7 +179,7 @@ public class CustomerDaoDb implements CustomerDao {
 		List<Customer> customers = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			Statement stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 
@@ -198,7 +197,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new CouponsException("[x] -> CustomersDAO: failed to get customers list from database", e);
 		} finally {
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 

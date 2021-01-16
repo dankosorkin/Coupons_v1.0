@@ -1,6 +1,7 @@
 package util.db;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
@@ -35,26 +36,32 @@ public class DB_Builder {
 	private static final String DROP_DB = "DROP DATABASE " + DB_Config.getDb_name();
 
 	public static void main(String[] args) {
-
 		try {
-//			executeSqlQuery(DROP_DB);
-//			System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped");
-			executeSqlQuery(COMPANIES);
-			System.out.println("[v] -> COMPANIES table created");
-			executeSqlQuery(CUSTOMERS);
-			System.out.println("[v] -> CUSTOMERS table created");
-			executeSqlQuery(CATEGORIES);
-			System.out.println("[v] -> CATEGORIES table created");
-			executeSqlQuery(COUPONS);
-			System.out.println("[v] -> COUPONS table created");
-			executeSqlQuery(CUSTOMERS_VS_COUPONS);
-			System.out.println("[v] -> CUSTOMERS_VS_COUPONS table created");
-			populateCategories();
-			System.out.println("[v] -> CATEGORIES table populated");
+
+			build();
 
 		} catch (ConnectionPoolException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void build() throws ConnectionPoolException {
+
+		executeSqlQuery(DROP_DB);
+		System.out.println("[v] -> database " + DB_Config.getDb_name() + " droped");
+		executeSqlQuery(COMPANIES);
+		System.out.println("[v] -> COMPANIES table created");
+		executeSqlQuery(CUSTOMERS);
+		System.out.println("[v] -> CUSTOMERS table created");
+		executeSqlQuery(CATEGORIES);
+		System.out.println("[v] -> CATEGORIES table created");
+		executeSqlQuery(COUPONS);
+		System.out.println("[v] -> COUPONS table created");
+		executeSqlQuery(CUSTOMERS_VS_COUPONS);
+		System.out.println("[v] -> CUSTOMERS_VS_COUPONS table created");
+		populateCategories();
+		System.out.println("[v] -> CATEGORIES table populated");
+
 	}
 
 	/**
@@ -65,7 +72,8 @@ public class DB_Builder {
 	public static void executeSqlQuery(String sql) throws ConnectionPoolException {
 		try {
 			if (connection == null)
-				connection = pool.getInstance().getConnection();
+				connection = DriverManager.getConnection(DB_Config.getUrl(), DB_Config.getUser(),
+						DB_Config.getPassword());
 
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
@@ -92,7 +100,8 @@ public class DB_Builder {
 		for (Category category : Category.values()) {
 			try {
 				if (connection == null)
-					connection = pool.getInstance().getConnection();
+					connection = DriverManager.getConnection(DB_Config.getUrl(), DB_Config.getUser(),
+							DB_Config.getPassword());
 
 				PreparedStatement pstmt = connection.prepareStatement(sql);
 				pstmt.setInt(1, category.ordinal() + 1);

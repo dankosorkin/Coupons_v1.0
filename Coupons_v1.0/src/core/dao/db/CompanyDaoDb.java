@@ -15,7 +15,6 @@ import util.db.DB_Config;
 
 public class CompanyDaoDb implements CompanyDao {
 
-	private ConnectionPool pool;
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
@@ -26,7 +25,7 @@ public class CompanyDaoDb implements CompanyDao {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies WHERE email=? AND password=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
@@ -43,7 +42,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 
 		}
@@ -56,10 +55,10 @@ public class CompanyDaoDb implements CompanyDao {
 	public int add(Company company) throws CouponsException {
 
 		int id = 0;
-		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Companies VALUES(?,?,?)";
+		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Companies VALUES(0,?,?,?)";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, company.getName());
 			pstmt.setString(2, company.getEmail());
@@ -72,7 +71,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -85,7 +84,7 @@ public class CompanyDaoDb implements CompanyDao {
 		String sql = "UPDATE " + DB_Config.getDb_name() + ".Companies SET email=?, password=? WHERE id=?";
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, ((Company) company).getEmail());
 			pstmt.setString(2, ((Company) company).getPassword());
@@ -99,7 +98,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 	}
@@ -112,7 +111,7 @@ public class CompanyDaoDb implements CompanyDao {
 		Company company = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
 
@@ -132,7 +131,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -148,7 +147,7 @@ public class CompanyDaoDb implements CompanyDao {
 		Company company = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, companyId);
 
@@ -169,7 +168,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -184,7 +183,7 @@ public class CompanyDaoDb implements CompanyDao {
 		Company company = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, name);
 
@@ -205,7 +204,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -220,7 +219,7 @@ public class CompanyDaoDb implements CompanyDao {
 		Company company = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);
 
@@ -241,7 +240,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = null;
 
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
@@ -255,7 +254,7 @@ public class CompanyDaoDb implements CompanyDao {
 		List<Company> companies = null;
 
 		try {
-			conn = pool.getConnection();
+			conn = ConnectionPool.getInstance().getConnection();
 			Statement stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 
@@ -272,7 +271,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new CouponsException("[x] -> CompaniyDAO: failed to get compaies list from database", e);
 		} finally {
 			if (conn != null)
-				pool.getInstance().restoreConnection(conn);
+				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
 
