@@ -160,6 +160,47 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
+	public Coupon findByTitle(String title) throws CouponsException {
+
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE title=?";
+
+		Coupon coupon = null;
+
+		try {
+			conn = ConnectionPool.getInstance().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, title);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				coupon = new Coupon();
+				coupon.setId(rs.getInt("id"));
+				coupon.setCompanyId(rs.getInt("company_id"));
+				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
+				coupon.setTitle(rs.getString("title"));
+				coupon.setDescription(rs.getString("description"));
+				coupon.setStartDate((rs.getDate("start_date")).toLocalDate());
+				coupon.setEndDate((rs.getDate("end_date")).toLocalDate());
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+			}
+
+		} catch (SQLException e) {
+			throw new CouponsException("[x] -> CouponsDAO: failed to get coupon", e);
+		} finally {
+			rs = null;
+			pstmt = null;
+
+			if (conn != null)
+				ConnectionPool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+
+		return coupon;
+	}
+
+	@Override
 	public List<Coupon> findAll() throws CouponsException {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons";

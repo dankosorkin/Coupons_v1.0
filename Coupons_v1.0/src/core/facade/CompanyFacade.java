@@ -8,7 +8,8 @@ public class CompanyFacade extends ClientFacade {
 
 	private int id;
 
-	public CompanyFacade() {
+	public CompanyFacade(int id) {
+		this.id = id;
 	}
 
 	public int getId() {
@@ -26,7 +27,11 @@ public class CompanyFacade extends ClientFacade {
 	}
 
 	public int addCoupon(Coupon coupon) throws CouponsException {
-		return couponsDao.add(coupon);
+		// look for the coupon in the database
+		Coupon couponDB = couponsDao.findByTitle(coupon.getTitle());
+		if (couponDB == null || coupon.getCompanyId() != this.id)
+			return couponsDao.add(coupon);
+		throw new CouponsException("[x] OPERATION FAILED >>> add coupon: already exists");
 	}
 
 }

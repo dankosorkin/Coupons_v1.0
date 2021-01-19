@@ -28,8 +28,7 @@ public class AdminFacade extends ClientFacade {
 
 		if (companiesDao.findByName(company.getName()) == null && companiesDao.findByEmail(company.getEmail()) == null)
 			return companiesDao.add(company);
-		else
-			throw new CouponsException("[x] OPERATION FAILED >>> add company: already exists");
+		throw new CouponsException("[x] OPERATION FAILED >>> add company: already exists");
 	}
 
 	public void updateCompany(Company company) throws CouponsException {

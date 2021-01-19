@@ -15,6 +15,8 @@ public interface CouponDao {
 
 	Coupon findById(int id) throws CouponsException;
 
+	Coupon findByTitle(String title) throws CouponsException;
+
 	List<Coupon> findAll() throws CouponsException;
 
 	List<Coupon> findAllByCompanyId(int id) throws CouponsException;
