@@ -44,6 +44,8 @@ public class TestCompany {
 		// operation allowed
 		cp6.setId(facade.addCoupon(cp6));
 
+		System.out.println(facade.findAll());
+
 	}
 
 }

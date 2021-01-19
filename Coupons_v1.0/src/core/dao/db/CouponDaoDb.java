@@ -21,7 +21,7 @@ public class CouponDaoDb implements CouponDao {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	private List<Coupon> coupons = new ArrayList<Coupon>();
+	private List<Coupon> coupons;
 
 	@Override
 	public int add(Coupon coupon) throws CouponsException {
@@ -212,7 +212,7 @@ public class CouponDaoDb implements CouponDao {
 			Statement stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 
-			if (rs.next()) {
+			while (rs.next()) {
 				Coupon coupon = new Coupon();
 				coupon.setId(rs.getInt("id"));
 				coupon.setCompanyId(rs.getInt("company_id"));
@@ -244,7 +244,7 @@ public class CouponDaoDb implements CouponDao {
 	public List<Coupon> findAllByCompanyId(int id) throws CouponsException {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE company_id=?";
 
-		coupons = null;
+		coupons = new ArrayList<Coupon>();
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
@@ -252,7 +252,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				Coupon coupon = new Coupon();
 				coupon.setId(rs.getInt("id"));
 				coupon.setCompanyId(rs.getInt("company_id"));
@@ -291,7 +291,7 @@ public class CouponDaoDb implements CouponDao {
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				Coupon coupon = new Coupon();
 				coupon.setId(rs.getInt("id"));
 				coupon.setCompanyId(rs.getInt("company_id"));

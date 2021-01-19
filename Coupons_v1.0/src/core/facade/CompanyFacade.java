@@ -1,5 +1,7 @@
 package core.facade;
 
+import java.util.List;
+
 import core.beans.Company;
 import core.beans.Coupon;
 import core.exceptions.CouponsException;
@@ -32,6 +34,10 @@ public class CompanyFacade extends ClientFacade {
 		if (couponDB == null || coupon.getCompanyId() != this.id)
 			return couponsDao.add(coupon);
 		throw new CouponsException("[x] OPERATION FAILED >>> add coupon: already exists");
+	}
+
+	public List<Coupon> findAll() throws CouponsException {
+		return couponsDao.findAllByCompanyId(this.id);
 	}
 
 }
