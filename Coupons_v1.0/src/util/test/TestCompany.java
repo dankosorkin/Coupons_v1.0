@@ -44,7 +44,18 @@ public class TestCompany {
 		// operation allowed
 		cp6.setId(facade.addCoupon(cp6));
 
-		System.out.println(facade.findAll());
+		System.out.println("All company coupons: " + facade.findAll());
+
+		// update coupon 2
+		cp2.setTitle("Spain"); // operation not allowed and will ignored for test
+		cp2.setAmount(5);
+		cp2.setCategory(Category.VACATION);
+		cp2.setPrice(3.90);
+		facade.updateCoupon(cp2);
+		System.out.println("All company coupons (updated coupon 2): " + facade.findAll());
+
+		// delete coupon
+		facade.deleteCoupon(cp1);
 
 	}
 

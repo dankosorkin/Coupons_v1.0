@@ -65,20 +65,19 @@ public class CouponDaoDb implements CouponDao {
 	public void update(Coupon coupon) throws CouponsException {
 
 		String sql = "UPDATE " + DB_Config.getDb_name()
-				+ " SET category_id=?, title=?, description=?, start_date=? end_date? amount=?, price=? image=? WHERE id=?";
+				+ ".Coupons SET category_id=?, description=?, start_date=?, end_date=?, amount=?, price=?, image=? WHERE id=?";
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, coupon.getCategory().ordinal() + 1);
-			pstmt.setString(2, coupon.getTitle());
-			pstmt.setString(3, coupon.getDescription());
-			pstmt.setDate(4, Date.valueOf(coupon.getStartDate()));
-			pstmt.setDate(5, Date.valueOf(coupon.getEndDate()));
-			pstmt.setInt(6, coupon.getAmount());
-			pstmt.setDouble(7, coupon.getPrice());
-			pstmt.setString(8, coupon.getImage());
-			pstmt.setInt(9, coupon.getId());
+			pstmt.setString(2, coupon.getDescription());
+			pstmt.setDate(3, Date.valueOf(coupon.getStartDate()));
+			pstmt.setDate(4, Date.valueOf(coupon.getEndDate()));
+			pstmt.setInt(5, coupon.getAmount());
+			pstmt.setDouble(6, coupon.getPrice());
+			pstmt.setString(7, coupon.getImage());
+			pstmt.setInt(8, coupon.getId());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -104,10 +103,28 @@ public class CouponDaoDb implements CouponDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, couponId);
 			pstmt.executeUpdate();
+
+			rs = pstmt.getResultSet();
+			if (rs.next()) {
+				coupon = new Coupon();
+				coupon.setId(rs.getInt("id"));
+				coupon.setCompanyId(rs.getInt("company_id"));
+				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
+				coupon.setTitle(rs.getString("title"));
+				coupon.setDescription(rs.getString("description"));
+				coupon.setStartDate(rs.getDate("start_date").toLocalDate());
+				coupon.setEndDate(rs.getDate("end_date").toLocalDate());
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+			}
+
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CouponsDAO: failed to delete coupon", e);
 		} finally {
 			pstmt = null;
+
+			rs = null;
 
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
