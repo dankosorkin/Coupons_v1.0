@@ -66,8 +66,11 @@ public class CustomerDaoDb implements CustomerDao {
 			pstmt.setString(2, customer.getLastName());
 			pstmt.setString(3, customer.getEmail());
 			pstmt.setString(4, customer.getPassword());
+			pstmt.executeUpdate();
 
-			id = pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			if (rs.next())
+				id = rs.getInt(1);
 
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CustomersDAO: failed to add customer", e);
@@ -86,7 +89,7 @@ public class CustomerDaoDb implements CustomerDao {
 	public void update(Customer customer) throws CouponsException {
 
 		String sql = "UPDATE " + DB_Config.getDb_name()
-				+ ".Customers SET first_name=? last_name=?, email=?, password=? WHERE id=?";
+				+ ".Customers SET first_name=?, last_name=?, email=?, password=? WHERE id=?";
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();

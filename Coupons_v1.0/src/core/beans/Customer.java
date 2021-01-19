@@ -134,15 +134,6 @@ public class Customer implements Serializable {
 	}
 
 	/**
-	 * The method sets list of all the coupons belongs to a customer
-	 * 
-	 * @param List<Coupon> coupons
-	 */
-	public void setCoupons(List<Coupon> coupons) {
-		this.coupons = coupons;
-	}
-
-	/**
 	 * String representation of a customer
 	 */
 	@Override
