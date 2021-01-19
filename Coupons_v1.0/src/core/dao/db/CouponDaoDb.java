@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import core.beans.Category;
@@ -20,6 +21,7 @@ public class CouponDaoDb implements CouponDao {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	private List<Coupon> coupons = new ArrayList<Coupon>();
 
 	@Override
 	public int add(Coupon coupon) throws CouponsException {
@@ -158,7 +160,7 @@ public class CouponDaoDb implements CouponDao {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons";
 
-		List<Coupon> coupons = null;
+		coupons = null;
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
@@ -197,7 +199,46 @@ public class CouponDaoDb implements CouponDao {
 	public List<Coupon> findAllByCompanyId(int id) throws CouponsException {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE company_id=?";
 
-		List<Coupon> coupons = null;
+		coupons = null;
+
+		try {
+			conn = ConnectionPool.getInstance().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt("id"));
+				coupon.setCompanyId(rs.getInt("company_id"));
+				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
+				coupon.setTitle(rs.getString("title"));
+				coupon.setDescription(rs.getString("description"));
+				coupon.setStartDate((rs.getDate("start_date")).toLocalDate());
+				coupon.setEndDate((rs.getDate("end_date")).toLocalDate());
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+				coupons.add(coupon);
+			}
+
+		} catch (SQLException e) {
+		} finally {
+			rs = null;
+
+			if (conn != null)
+				ConnectionPool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+
+		return coupons;
+	}
+
+	@Override
+	public List<Coupon> findAllByCustomerId(int id) throws CouponsException {
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customer_VS_Coupon WHERE customer_id=?";
+
+		coupons = null;
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();

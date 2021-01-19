@@ -36,12 +36,12 @@ public class AdminFacade extends ClientFacade {
 		companiesDao.update(company);
 	}
 
-	public void deleteCompany(int id) throws CouponsException {
+	public void deleteCompany(int companyId) throws CouponsException {
 
 		// if company found
-		if (companiesDao.findById(id) != null) {
+		if (companiesDao.findById(companyId) != null) {
 			// get all coupons of a company
-			List<Coupon> coupons = couponsDao.findAllByCompanyId(id);
+			List<Coupon> coupons = couponsDao.findAllByCompanyId(companyId);
 
 			// if coupons found
 			if (coupons != null) {
@@ -53,7 +53,7 @@ public class AdminFacade extends ClientFacade {
 				}
 			}
 			// 3. delete company
-			companiesDao.delete(id);
+			companiesDao.delete(companyId);
 		}
 	}
 
@@ -74,6 +74,25 @@ public class AdminFacade extends ClientFacade {
 
 	public void updateCustomer(Customer customer) throws CouponsException {
 		customersDao.update(customer);
+	}
+
+	public void deleteCustomer(int customerId) throws CouponsException {
+		// 1. check if exist
+		if (customersDao.findById(customerId) != null) {
+			// 2. check if have coupons
+			List<Coupon> coupons = couponsDao.findAllByCustomerId(customerId);
+
+			if (coupons != null) {
+				for (Coupon coupon : coupons) {
+					// 3. delete coupon purchase
+					couponsDao.deleteCustomerPurchase(customerId, coupon.getId());
+					// 4. re-assign coupon amount
+					coupon.setAmount(coupon.getAmount() + 1);
+				}
+			}
+			// 5. delete customer
+			customersDao.delete(customerId);
+		}
 	}
 
 	public Customer getOneCustomer(int customerId) throws CouponsException {
