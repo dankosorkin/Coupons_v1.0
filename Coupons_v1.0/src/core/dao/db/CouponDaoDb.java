@@ -256,7 +256,29 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public void deletePurchase(int customerId, int couponId) throws CouponsException {
+	public void deletePurchase(int couponId) throws CouponsException {
+
+		String sql = "DELETE FROM" + DB_Config.getDb_name() + ".Customers_VS_Coupons WHERE coupon_id=?";
+
+		try {
+			conn = ConnectionPool.getInstance().getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, couponId);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new CouponsException("[x] -> CouponsDAO: failed to delete coupon purchase", e);
+		} finally {
+			pstmt = null;
+
+			if (conn != null)
+				ConnectionPool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+	}
+
+	@Override
+	public void deleteCustomerPurchase(int customerId, int couponId) throws CouponsException {
 
 		String sql = "DELETE FROM" + DB_Config.getDb_name()
 				+ ".Customers_VS_Coupons WHERE customer_id=? AND coupon_id=?";

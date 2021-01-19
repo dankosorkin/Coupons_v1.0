@@ -4,8 +4,6 @@ import java.util.List;
 
 import core.beans.Company;
 import core.beans.Coupon;
-import core.dao.db.CompanyDaoDb;
-import core.dao.db.CouponDaoDb;
 import core.exceptions.CouponsException;
 
 public class AdminFacade extends ClientFacade {
@@ -14,8 +12,6 @@ public class AdminFacade extends ClientFacade {
 	private String password = "admin";
 
 	public AdminFacade() {
-		super.companiesDao = new CompanyDaoDb();
-		super.couponsDao = new CouponDaoDb();
 	}
 
 	@Override
@@ -40,6 +36,9 @@ public class AdminFacade extends ClientFacade {
 	}
 
 	public Company deleteCompany(int id) throws CouponsException {
+
+		Company company = null;
+
 		// if company found
 		if (companiesDao.findById(id) != null) {
 			// get all coupons of a company
@@ -48,20 +47,17 @@ public class AdminFacade extends ClientFacade {
 			// if coupons found
 			if (coupons != null) {
 				// 1. delete all coupon purchase from customer_vs_coupon
-
-				// 2. delete coupons
-
+				for (Coupon coupon : coupons) {
+					couponsDao.deletePurchase(coupon.getId());
+					// 2. delete coupons
+					couponsDao.delete(coupon.getId());
+				}
 			}
-
+			// 3. delete company
+			company = companiesDao.delete(id);
 		}
+		return company;
 
-		// 3. delete company
-		Company company = companiesDao.delete(id);
-
-		if (company != null)
-			return company;
-		else
-			throw new CouponsException("[x] OPERATION FAILED >>> delete company: not found");
 	}
 
 }

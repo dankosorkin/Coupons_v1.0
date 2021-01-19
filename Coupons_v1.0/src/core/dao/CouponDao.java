@@ -21,6 +21,8 @@ public interface CouponDao {
 
 	void addPurchase(int customerId, int couponId) throws CouponsException;
 
-	void deletePurchase(int customerId, int couponId) throws CouponsException;
+	void deletePurchase(int couponId) throws CouponsException;
+
+	void deleteCustomerPurchase(int customerId, int couponId) throws CouponsException;
 
 }

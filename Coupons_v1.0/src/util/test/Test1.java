@@ -1,21 +1,12 @@
 package util.test;
 
 import core.beans.Company;
-import core.dao.CompanyDao;
-import core.dao.CouponDao;
-import core.dao.CustomerDao;
-import core.dao.db.CompanyDaoDb;
-import core.dao.db.CouponDaoDb;
-import core.dao.db.CustomerDaoDb;
 import core.exceptions.CouponsException;
 import core.facade.AdminFacade;
 import util.db.DB_Builder;
 
 public class Test1 {
 
-	private static CompanyDao companyDao = new CompanyDaoDb();
-	private static CouponDao couponDao = new CouponDaoDb();
-	private static CustomerDao customerDao = new CustomerDaoDb();
 	private static AdminFacade admin = new AdminFacade();
 
 	public static void main(String[] args) {
