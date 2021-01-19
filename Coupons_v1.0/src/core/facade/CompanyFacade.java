@@ -8,6 +8,13 @@ public class CompanyFacade extends ClientFacade {
 
 	private int id;
 
+	public CompanyFacade() {
+	}
+
+	public int getId() {
+		return id;
+	}
+
 	@Override
 	protected boolean login(String email, String password) throws CouponsException {
 		if (companiesDao.isExists(email, password)) {
@@ -18,8 +25,8 @@ public class CompanyFacade extends ClientFacade {
 		return false;
 	}
 
-	public int addCoupon(Coupon coupon) {
-		return 0;
+	public int addCoupon(Coupon coupon) throws CouponsException {
+		return couponsDao.add(coupon);
 	}
 
 }

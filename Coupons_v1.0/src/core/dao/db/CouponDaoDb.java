@@ -27,7 +27,7 @@ public class CouponDaoDb implements CouponDao {
 	public int add(Coupon coupon) throws CouponsException {
 
 		int id = 0;
-		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Coupons VALUES(?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Coupons VALUES(0,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
@@ -42,7 +42,11 @@ public class CouponDaoDb implements CouponDao {
 			pstmt.setDouble(8, coupon.getPrice());
 			pstmt.setString(9, coupon.getImage());
 
-			id = pstmt.executeUpdate();
+			pstmt.executeUpdate();
+
+			rs = pstmt.getGeneratedKeys();
+			if (rs.next())
+				id = rs.getInt(1);
 
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CouponsDAO: failed to add coupon", e);
