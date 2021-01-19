@@ -55,7 +55,8 @@ public class TestCompany {
 		System.out.println("All company coupons (updated coupon 2): " + facade.findAll());
 
 		// delete coupon
-		facade.deleteCoupon(cp1);
+		System.out.println();
+		facade.deleteCoupon(cp2);
 
 	}
 

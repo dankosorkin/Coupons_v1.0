@@ -92,11 +92,9 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	@Override
-	public Coupon delete(int couponId) throws CouponsException {
+	public void delete(int couponId) throws CouponsException {
 
 		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Coupons WHERE id=?";
-
-		Coupon coupon = null;
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
@@ -104,34 +102,17 @@ public class CouponDaoDb implements CouponDao {
 			pstmt.setInt(1, couponId);
 			pstmt.executeUpdate();
 
-			rs = pstmt.getResultSet();
-			if (rs.next()) {
-				coupon = new Coupon();
-				coupon.setId(rs.getInt("id"));
-				coupon.setCompanyId(rs.getInt("company_id"));
-				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
-				coupon.setTitle(rs.getString("title"));
-				coupon.setDescription(rs.getString("description"));
-				coupon.setStartDate(rs.getDate("start_date").toLocalDate());
-				coupon.setEndDate(rs.getDate("end_date").toLocalDate());
-				coupon.setAmount(rs.getInt("amount"));
-				coupon.setPrice(rs.getDouble("price"));
-				coupon.setImage(rs.getString("image"));
-			}
-
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CouponsDAO: failed to delete coupon", e);
 		} finally {
-			pstmt = null;
-
 			rs = null;
+
+			pstmt = null;
 
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
-
-		return coupon;
 
 	}
 
@@ -361,7 +342,7 @@ public class CouponDaoDb implements CouponDao {
 	@Override
 	public void deletePurchase(int couponId) throws CouponsException {
 
-		String sql = "DELETE FROM" + DB_Config.getDb_name() + ".Customers_VS_Coupons WHERE coupon_id=?";
+		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Customers_VS_Coupons WHERE coupon_id=?";
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();

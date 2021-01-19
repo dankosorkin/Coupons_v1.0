@@ -11,7 +11,7 @@ public interface CouponDao {
 
 	void update(Coupon coupon) throws CouponsException;
 
-	Coupon delete(int id) throws CouponsException;
+	void delete(int id) throws CouponsException;
 
 	Coupon findById(int id) throws CouponsException;
 
