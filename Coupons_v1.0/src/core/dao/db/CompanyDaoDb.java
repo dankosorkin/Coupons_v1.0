@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import core.beans.Company;
@@ -18,6 +19,7 @@ public class CompanyDaoDb implements CompanyDao {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	private List<Company> companies;
 
 	@Override
 	public boolean isExists(String email, String password) throws CouponsException {
@@ -108,7 +110,7 @@ public class CompanyDaoDb implements CompanyDao {
 	}
 
 	@Override
-	public Company delete(int id) throws CouponsException {
+	public void delete(int id) throws CouponsException {
 
 		String sql = "DELETE FROM " + DB_Config.getDb_name() + ".Companies WHERE id=?";
 
@@ -119,15 +121,7 @@ public class CompanyDaoDb implements CompanyDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
 
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				company = new Company();
-				company.setId(rs.getInt("id"));
-				company.setName(rs.getString("name"));
-				company.setEmail(rs.getString("email"));
-				company.setPassword(rs.getString("password"));
-			}
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CompaniyDAO: failed to remove company", e);
@@ -138,8 +132,6 @@ public class CompanyDaoDb implements CompanyDao {
 				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
 		}
-
-		return company;
 
 	}
 
@@ -255,7 +247,7 @@ public class CompanyDaoDb implements CompanyDao {
 	public List<Company> findAll() throws CouponsException {
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Companies";
 
-		List<Company> companies = null;
+		companies = new ArrayList<Company>();
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();

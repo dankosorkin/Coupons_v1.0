@@ -35,9 +35,7 @@ public class AdminFacade extends ClientFacade {
 		companiesDao.update(company);
 	}
 
-	public Company deleteCompany(int id) throws CouponsException {
-
-		Company company = null;
+	public void deleteCompany(int id) throws CouponsException {
 
 		// if company found
 		if (companiesDao.findById(id) != null) {
@@ -54,10 +52,12 @@ public class AdminFacade extends ClientFacade {
 				}
 			}
 			// 3. delete company
-			company = companiesDao.delete(id);
+			companiesDao.delete(id);
 		}
-		return company;
+	}
 
+	public List<Company> getAllCompanies() throws CouponsException {
+		return companiesDao.findAll();
 	}
 
 }

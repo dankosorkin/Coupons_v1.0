@@ -35,16 +35,6 @@ public class DB_Builder {
 	// drop database
 	private static final String DROP_DB = "DROP DATABASE " + DB_Config.getDb_name();
 
-	public static void main(String[] args) {
-		try {
-
-			build();
-
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void build() throws ConnectionPoolException {
 
 		executeSqlQuery(DROP_DB);
