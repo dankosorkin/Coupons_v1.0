@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import core.beans.Customer;
@@ -18,6 +19,7 @@ public class CustomerDaoDb implements CustomerDao {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	private List<Customer> customers;
 
 	@Override
 	public boolean isExists(String email, String password) throws CouponsException {
@@ -54,7 +56,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public int add(Customer customer) throws CouponsException {
 
 		int id = 0;
-		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers VALUES(?,?,?,?)";
+
+		String sql = "INSERT INTO " + DB_Config.getDb_name() + ".Customers VALUES(0,?,?,?,?)";
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
@@ -176,7 +179,7 @@ public class CustomerDaoDb implements CustomerDao {
 
 		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Customers";
 
-		List<Customer> customers = null;
+		customers = new ArrayList<Customer>();
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import core.beans.Company;
 import core.beans.Coupon;
+import core.beans.Customer;
 import core.exceptions.CouponsException;
 
 public class AdminFacade extends ClientFacade {
@@ -56,8 +57,31 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	public Company getOneCompany(int companyId) throws CouponsException {
+		return companiesDao.findById(companyId);
+	}
+
 	public List<Company> getAllCompanies() throws CouponsException {
 		return companiesDao.findAll();
+	}
+
+	public int addCustomer(Customer customer) throws CouponsException {
+		if (!customersDao.isExists(customer.getEmail(), customer.getPassword()))
+			return customersDao.add(customer);
+		else
+			throw new CouponsException("[x] OPERATION FAILED >>> add customer: already exists");
+	}
+
+	public void updateCustomer(Customer customer) throws CouponsException {
+		customersDao.update(customer);
+	}
+
+	public Customer getOneCustomer(int customerId) throws CouponsException {
+		return customersDao.findById(customerId);
+	}
+
+	public List<Customer> getAllCustomers() throws CouponsException {
+		return customersDao.findAll();
 	}
 
 }
