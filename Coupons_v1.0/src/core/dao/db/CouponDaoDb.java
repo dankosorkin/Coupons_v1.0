@@ -143,10 +143,13 @@ public class CouponDaoDb implements CouponDao {
 				coupon.setImage(rs.getString("image"));
 			}
 
+			return coupon;
+
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CouponsDAO: failed to get coupon", e);
 		} finally {
 			rs = null;
+
 			pstmt = null;
 
 			if (conn != null)
@@ -154,7 +157,6 @@ public class CouponDaoDb implements CouponDao {
 			conn = null;
 		}
 
-		return coupon;
 	}
 
 	@Override
@@ -184,10 +186,13 @@ public class CouponDaoDb implements CouponDao {
 				coupon.setImage(rs.getString("image"));
 			}
 
+			return coupon;
+
 		} catch (SQLException e) {
 			throw new CouponsException("[x] -> CouponsDAO: failed to get coupon", e);
 		} finally {
 			rs = null;
+
 			pstmt = null;
 
 			if (conn != null)
@@ -195,7 +200,6 @@ public class CouponDaoDb implements CouponDao {
 			conn = null;
 		}
 
-		return coupon;
 	}
 
 	@Override

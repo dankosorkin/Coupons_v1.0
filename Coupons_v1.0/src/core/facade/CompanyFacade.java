@@ -42,9 +42,9 @@ public class CompanyFacade extends ClientFacade {
 
 	public void deleteCoupon(Coupon coupon) throws CouponsException {
 		// check if exists and belongs to a company
-		Coupon couponDB = couponsDao.findByTitle(coupon.getTitle());
+		Coupon couponDB = couponsDao.findById(coupon.getId());
 
-		if (couponDB != null && coupon.getCompanyId() == this.id) {
+		if (couponDB != null && couponDB.getCompanyId() == this.id) {
 			// check purchases and delete them
 			couponsDao.deletePurchase(coupon.getId());
 			// delete coupon
@@ -54,6 +54,10 @@ public class CompanyFacade extends ClientFacade {
 			throw new CouponsException(
 					"[x] OPERATION FAILED >>> delete coupon: not exists or not belonging to company_id=" + this.id);
 		}
+	}
+
+	public Coupon findOne(int id) throws CouponsException {
+		return couponsDao.findById(id);
 	}
 
 	public List<Coupon> findAll() throws CouponsException {
