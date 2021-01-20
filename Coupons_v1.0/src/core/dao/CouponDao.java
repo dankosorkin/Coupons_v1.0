@@ -2,6 +2,7 @@ package core.dao;
 
 import java.util.List;
 
+import core.beans.Category;
 import core.beans.Coupon;
 import core.exceptions.CouponsException;
 
@@ -22,6 +23,8 @@ public interface CouponDao {
 	List<Coupon> findAllByCompanyId(int id) throws CouponsException;
 
 	List<Coupon> findAllByCustomerId(int id) throws CouponsException;
+
+	List<Coupon> findAllByCategory(int id, Category category) throws CouponsException;
 
 	void addPurchase(int customerId, int couponId) throws CouponsException;
 

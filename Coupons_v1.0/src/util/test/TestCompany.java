@@ -26,7 +26,7 @@ public class TestCompany {
 				LocalDate.of(2021, 01, 01), LocalDate.of(2021, 01, 10), 10, 5.90, null);
 		Coupon cp3 = new Coupon(company.getId(), Category.VACATION, "Austria", "3 weekend nights at 5* hotel",
 				LocalDate.of(2021, 01, 01), LocalDate.of(2021, 01, 10), 10, 5.90, null);
-		Coupon cp4 = new Coupon(company.getId(), Category.VACATION, "Russia", "3 weekend nights at 5* hotel",
+		Coupon cp4 = new Coupon(company.getId(), Category.TRAVELLING, "Russia", "3 weekend nights at 5* hotel",
 				LocalDate.of(2021, 01, 01), LocalDate.of(2021, 01, 10), 10, 5.90, null);
 		Coupon cp5 = new Coupon(company.getId(), Category.VACATION, "Africa", "3 weekend nights at 5* hotel",
 				LocalDate.of(2021, 01, 01), LocalDate.of(2021, 01, 10), 10, 5.90, null);
@@ -58,6 +58,9 @@ public class TestCompany {
 		System.out.println("One coupon: " + facade.findOne(cp3.getId()));
 		facade.deleteCoupon(cp1);
 		System.out.println("All company coupons (delete coupon): " + facade.findAll());
+
+		// find all by category
+		System.out.println("All by category: " + facade.findAllByCategory(Category.VACATION));
 
 	}
 

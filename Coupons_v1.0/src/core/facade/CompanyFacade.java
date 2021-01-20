@@ -2,6 +2,7 @@ package core.facade;
 
 import java.util.List;
 
+import core.beans.Category;
 import core.beans.Company;
 import core.beans.Coupon;
 import core.exceptions.CouponsException;
@@ -62,6 +63,10 @@ public class CompanyFacade extends ClientFacade {
 
 	public List<Coupon> findAll() throws CouponsException {
 		return couponsDao.findAllByCompanyId(this.id);
+	}
+
+	public List<Coupon> findAllByCategory(Category category) throws CouponsException {
+		return couponsDao.findAllByCategory(this.id, category);
 	}
 
 }
