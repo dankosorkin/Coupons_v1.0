@@ -69,4 +69,8 @@ public class CompanyFacade extends ClientFacade {
 		return couponsDao.findAllByCategory(this.id, category);
 	}
 
+	public List<Coupon> findAllByPrice(double price) throws CouponsException {
+		return couponsDao.findAllByPrice(this.id, price);
+	}
+
 }
