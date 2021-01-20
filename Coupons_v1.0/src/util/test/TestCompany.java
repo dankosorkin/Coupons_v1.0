@@ -20,6 +20,8 @@ public class TestCompany {
 		Company company = admin.getOneCompany(2);
 		CompanyFacade facade = new CompanyFacade(company.getId());
 
+		System.out.println(company);
+
 		Coupon cp1 = new Coupon(company.getId(), Category.VACATION, "Turkey", "3 weekend nights at 5* hotel",
 				LocalDate.of(2021, 01, 01), LocalDate.of(2021, 01, 10), 10, 1.90, null);
 		Coupon cp2 = new Coupon(company.getId(), Category.TRAVELLING, "Germany", "3 weekend nights at 5* hotel",
