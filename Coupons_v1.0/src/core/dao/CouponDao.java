@@ -26,6 +26,8 @@ public interface CouponDao {
 
 	List<Coupon> findAllByCategory(int id, Category category) throws CouponsException;
 
+	public List<Coupon> findAllByPrice(int id, double price) throws CouponsException;
+
 	void addPurchase(int customerId, int couponId) throws CouponsException;
 
 	void deletePurchase(int couponId) throws CouponsException;

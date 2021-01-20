@@ -234,6 +234,8 @@ public class CouponDaoDb implements CouponDao {
 		} finally {
 			rs = null;
 
+			pstmt = null;
+
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
@@ -272,6 +274,8 @@ public class CouponDaoDb implements CouponDao {
 		} catch (SQLException e) {
 		} finally {
 			rs = null;
+
+			pstmt = null;
 
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
@@ -313,6 +317,50 @@ public class CouponDaoDb implements CouponDao {
 		} finally {
 			rs = null;
 
+			pstmt = null;
+
+			if (conn != null)
+				ConnectionPool.getInstance().restoreConnection(conn);
+			conn = null;
+		}
+
+		return coupons;
+	}
+
+	@Override
+	public List<Coupon> findAllByPrice(int id, double price) throws CouponsException {
+		String sql = "SELECT * FROM " + DB_Config.getDb_name() + ".Coupons WHERE company_id=? AND price<=?";
+
+		coupons = new ArrayList<Coupon>();
+
+		try {
+			conn = ConnectionPool.getInstance().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			pstmt.setDouble(2, price);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt("id"));
+				coupon.setCompanyId(rs.getInt("company_id"));
+				coupon.setCategory(Category.values()[rs.getInt("category_id") - 1]);
+				coupon.setTitle(rs.getString("title"));
+				coupon.setDescription(rs.getString("description"));
+				coupon.setStartDate((rs.getDate("start_date")).toLocalDate());
+				coupon.setEndDate((rs.getDate("end_date")).toLocalDate());
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+				coupons.add(coupon);
+			}
+
+		} catch (SQLException e) {
+		} finally {
+			rs = null;
+
+			pstmt = null;
+
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
 			conn = null;
@@ -351,6 +399,8 @@ public class CouponDaoDb implements CouponDao {
 		} catch (SQLException e) {
 		} finally {
 			rs = null;
+
+			pstmt = null;
 
 			if (conn != null)
 				ConnectionPool.getInstance().restoreConnection(conn);
