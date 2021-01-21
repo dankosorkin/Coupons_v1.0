@@ -28,7 +28,7 @@ public class DB_Builder {
 			+ "image VARCHAR(50),foreign key (company_id) references " + DB_Config.getDb_name() + ".Companies(id),"
 			+ "foreign key (category_id) references " + DB_Config.getDb_name() + ".Categories(id));";
 	private static final String CUSTOMERS_VS_COUPONS = "CREATE TABLE IF NOT EXISTS " + DB_Config.getDb_name()
-			+ ".Customers_VS_Coupons(customer_id int primary key,coupon_id int,foreign key(customer_id) references "
+			+ ".Customers_VS_Coupons(customer_id int,coupon_id int,CONSTRAINT PK primary key(customer_id,coupon_id),foreign key(customer_id) references "
 			+ DB_Config.getDb_name() + ".Customers(id),foreign key(coupon_id) references " + DB_Config.getDb_name()
 			+ ".Coupons(id));";
 

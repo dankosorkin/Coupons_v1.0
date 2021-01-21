@@ -43,7 +43,7 @@ foreign key (category_id) references Coupons_v1.Categories(id)
 -- CUSTOMERS_VS_COUPONS
 CREATE TABLE IF NOT EXISTS Coupons_v1.Customers_VS_Coupons(
 customer_id int primary key,
-coupon_id int,
+coupon_id int primary key,
 foreign key(customer_id) references Coupons_V1.Customers(id),
 foreign key(coupon_id) references Coupons_V1.Coupons(id)
 );
