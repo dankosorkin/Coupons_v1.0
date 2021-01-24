@@ -1,5 +1,6 @@
 package core.facade;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import core.beans.Coupon;
@@ -23,23 +24,33 @@ public class CustomerFacade extends ClientFacade {
 	}
 
 	public boolean addPurchase(Coupon coupon) throws CouponsException {
-		List<Coupon> coupons = couponsDao.findAllByCustomerId(this.id);
-		boolean isPurchased = false;
-		// check if already purchased
-		if (coupons != null) {
-			for (Coupon couponDB : coupons) {
-				if (couponDB.getId() == coupon.getId()) {
-					isPurchased = true;
+
+		if (coupon.getAmount() > 0 && coupon.getEndDate().isAfter(LocalDate.now())) {
+
+			List<Coupon> coupons = couponsDao.findAllByCustomerId(this.id);
+
+			boolean isPurchased = false;
+
+			if (coupons != null) {
+				for (Coupon couponDB : coupons) {
+					if (couponDB.getId() == coupon.getId()) {
+						isPurchased = true;
+					}
 				}
 			}
+			if (!isPurchased) {
+				couponsDao.addPurchase(this.id, coupon.getId());
+				coupon.setAmount(coupon.getAmount() - 1);
+				couponsDao.update(coupon);
+			}
+			return !isPurchased;
 		}
-		// if not:
-		if (!isPurchased) {
-			couponsDao.addPurchase(this.id, coupon.getId());
-			coupon.setAmount(coupon.getAmount() - 1);
-			couponsDao.update(coupon);
-		}
-		return !isPurchased;
+		throw new CouponsException("Out of stock");
+
+	}
+
+	public List<Coupon> findAllPurchases() throws CouponsException {
+		return couponsDao.findAllByCustomerId(this.id);
 
 	}
 

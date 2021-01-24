@@ -14,7 +14,7 @@ public class TestAll {
 
 			TestAdmin.test();
 			TestCompany.test();
-			TestCustomer.test();
+//			TestCustomer.test();
 
 		} catch (CouponsException e) {
 			e.printStackTrace();
